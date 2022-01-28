@@ -8,15 +8,10 @@ import '../_mockLocations';
 import useLocation from '../hooks/useLocation';
 import { useIsFocused } from '@react-navigation/native';
 
-const TrackCreateScreen = ({navigation}) =>{
+const TrackCreateScreen = ({navigation }) =>{
     const { addLocation } = useContext(LocationContext);    
     const isFocused = useIsFocused();
-
-    console.log(isFocused)
-
-    const [err] = useLocation((location)=>{
-        addLocation(isFocused, location)
-    })
+    const [err] = useLocation(isFocused,addLocation)
  
     React.useLayoutEffect(()=>{
         navigation.setOptions({

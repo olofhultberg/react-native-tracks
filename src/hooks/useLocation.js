@@ -4,8 +4,7 @@ import { Accuracy, requestForegroundPermissionsAsync, watchPositionAsync } from 
 export default (shouldTrack , callback)=>{
     const [err, setErr] = useState(null);
     const [subscriber, setSubscriber] = useState(null);
-
-
+    
     const startWatching = async ()=>{
         try {
             const { granted } = await requestForegroundPermissionsAsync();
@@ -26,17 +25,14 @@ export default (shouldTrack , callback)=>{
     }
 
     useEffect(()=>{
-        // if (shouldTrack){
-        //     console.log('Should START tracking..')
-        //     startWatching()
-        // }else{
-        //     console.log('Should STOP tracking..')
-        //     subscriber.remove();
-        //     setSubscriber(null);
-        // }
-        console.log('Should START tracking..')
-        startWatching()
-    },[])
+        
+        if (shouldTrack){
+            startWatching()
+        }else{
+            subscriber.remove();
+            setSubscriber(null);
+        }
+    },[shouldTrack])
 
     return [err];
 
