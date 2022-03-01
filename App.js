@@ -7,7 +7,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Context as AuthContext } from './src/context/AuthContext';
 import { Provider as LocationProvider } from './src/context/LocationContext';
-
+import { Provider as TrackProvider } from './src/context/TrackContext';
+import { Foundation, Entypo } from '@expo/vector-icons'; 
 
 
 //Screens
@@ -28,9 +29,17 @@ function Home(){
 
   return(
     <Bottom.Navigator>
-      <Bottom.Screen name="TrackList" component={TrackListScreen}  />
-      <Bottom.Screen name="TrackCreate" component={TrackCreateScreen}  />
-      <Bottom.Screen name="Account" component={AccountScreen}  />
+      <Bottom.Screen name="List" component={TrackListScreen} 
+        options={{tabBarIcon: ()=> <Entypo name="list" size={20} color="black" />}}
+      />
+      <Bottom.Screen name="Create" component={TrackCreateScreen} 
+        options={{tabBarIcon: ()=> <Entypo name="new-message" size={20} color="black" />}}
+      />
+      <Bottom.Screen name="Account" component={AccountScreen}  
+      options={
+        {tabBarIcon: ()=> <Entypo name="user" size={20} color="black" />}
+      }
+      />
     </Bottom.Navigator>
   )
 }
@@ -44,7 +53,7 @@ function App() {
         <Stack.Navigator>
           {state.token ?
             <>
-              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Tracks" component={Home} />
               <Stack.Screen name="TrackDetail" component={TrackDetailScreen} />
             </>
             :
@@ -72,10 +81,12 @@ function App() {
 
 export default () => {
   return (
-    <LocationProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </LocationProvider>
+    <TrackProvider>
+      <LocationProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocationProvider>
+    </TrackProvider>
   )
 };

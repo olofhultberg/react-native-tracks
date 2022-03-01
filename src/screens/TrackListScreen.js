@@ -1,8 +1,19 @@
 import React, { useContext, useEffect } from 'react';
-import {View,TextInput, Text, StyleSheet,TouchableWithoutFeedback, Button } from 'react-native';
-import {Keyboard} from 'react-native'
+import {View,FlatList, Text, StyleSheet,ActivityIndicator, TouchableOpacity, Button } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { Context as TrackContext } from '../context/TrackContext';
+
 
 const TrackListScreen = ({navigation}) =>{
+
+    const { state, fetchTracks } = useContext(TrackContext);
+
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener('focus', ()=>{
+            fetchTracks();
+        })
+        return () => unsubscribe();
+    },[])
 
     React.useLayoutEffect(()=>{
         navigation.setOptions({
@@ -10,21 +21,39 @@ const TrackListScreen = ({navigation}) =>{
         })
     })
 
+    if (!state){
+        return <ActivityIndicator size="large" style={{ marginTop: 200 }}/>; 
+    }
+
     //Keyboard.dismiss()
     return (
         <View style={{flex:1}}>
-         <Text style={styles.text}>TrackList</Text>  
-         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-             <TextInput style={styles.input} showSoftInputOnFocus={true} keyboardType='numeric'/>
-         </TouchableWithoutFeedback>
-         <Button title='Go to track detail' onPress={()=>{ navigation.navigate('TrackDetail')}}/>
+        
+        <FlatList
+            data={state}
+            keyExtractor={(item)=>item._id}
+            renderItem={({item})=> {
+                return (
+                <TouchableOpacity onPress={()=>navigation.navigate('TrackDetail', { _id: item._id})}>
+                    <ListItem>
+                        <ListItem.Content>
+                            <ListItem.Title>{item.name}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+                </TouchableOpacity>
+                )
+            }}
+
+        />
+        
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     text:{
-        fontSize:48
+        fontSize:32
     },
     input:{
         borderColor: 'black',

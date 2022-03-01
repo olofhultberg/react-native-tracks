@@ -5,7 +5,7 @@ import Spacer from './Spacer';
 
 const AuthForm = ({ errorMessage, headerText, onSubmit, buttonTitle})=>{
     
-    const [email, setEmail] = useState('test91@test.com');
+    const [email, setEmail] = useState('test@test.com');
     const [password, setPassword] = useState('myPassword01');
 
     return (
